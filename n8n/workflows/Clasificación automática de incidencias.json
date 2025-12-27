@@ -143,11 +143,33 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -992,
+        -944,
         320
       ],
       "id": "99bffdf2-40e8-45ed-ab23-3984f08a2972",
       "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -592,
+        512
+      ],
+      "id": "2664fb05-24f2-4115-8e71-c1b6248b7058",
+      "name": "Insert rows in a table"
     }
   ],
   "pinData": {},
@@ -179,6 +201,11 @@
         [
           {
             "node": "If1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Insert rows in a table",
             "type": "main",
             "index": 0
           }
@@ -222,7 +249,7 @@
     "timeSavedMode": "fixed",
     "callerPolicy": "workflowsFromSameOwner"
   },
-  "versionId": "5f8330a1-e1e6-46c5-831d-6bb0d7334143",
+  "versionId": "3f0ca62e-75e9-480b-92c8-46b1e5093eeb",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "55fef6c19e6b68f46994be45d9709321bdedeb1a9071a5d7801e3506d529c984"
