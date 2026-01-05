@@ -4,6 +4,7 @@ from ai import clasificar_con_ia
 
 app = Flask(__name__)
 
+# endpoint clasificación ia
 @app.route("/clasificar", methods=["POST"])
 def clasificar():
     data = request.get_json()
@@ -51,7 +52,7 @@ def clasificar():
 # endpoint select * from db
 @app.route("/incidencias", methods=["GET"])
 def listar_incidencias():
-    conn = db.get_db()
+    conn = get_db()
     cur = conn.cursor()
 
     cur.execute("""
@@ -87,7 +88,7 @@ def actualizar_estado(id):
     if nuevo_estado not in ["abierta", "en_proceso", "cerrada"]:
         return jsonify({"error": "Estado no válido"}), 400
 
-    conn = db.get_db()
+    conn = get_db()
     cursor = conn.cursor()
 
     cursor.execute("""

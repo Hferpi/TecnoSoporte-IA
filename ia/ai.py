@@ -46,7 +46,7 @@ Formato exacto:
         raw = response.choices[0].message.content.strip()
         print("Respuesta cruda IA:", raw)
 
-        # Limpieza defensiva
+        # limpieza por si no responde en formato json
         raw = re.sub(r"```json|```", "", raw).strip()
         data = json.loads(raw)
 
