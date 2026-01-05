@@ -5,6 +5,6 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY app.py db.py ./
+COPY app.py db.py ai.py ./
 
-CMD ["python", "app.py"]
+CMD ["python", "app.py", "ai.py"]

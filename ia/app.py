@@ -1,37 +1,30 @@
 from flask import Flask, request, jsonify
-import db
-app = Flask(__name__)
+from db import get_db
+from ai import clasificar_con_ia
 
+app = Flask(__name__)
 
 @app.route("/clasificar", methods=["POST"])
 def clasificar():
     data = request.get_json()
-    texto = data.get("texto", "").lower()
+    texto = data.get("texto", "")
 
-    palabras_red = ["internet", "conexion", "red", "wifi"]
-    palabras_hardware = ["ordenador", "pc", "servidor", "hardware"]
-    palabras_ventas = ["comprar", "contratar", "interesado", "interesada"]
+    resultado = clasificar_con_ia(texto)
 
-    if any(p in texto for p in palabras_red):
-        tipo = "Red"
-        tecnico = "Carlos"
-    elif any(p in texto for p in palabras_hardware):
-        tipo = "Hardware"
-        tecnico = "Ana"
-    elif any(p in texto for p in palabras_ventas):
-        tipo = "Ventas"
-        tecnico = "Sebastian"
-    else:
-        tipo = "General"
-        tecnico = "Soporte"
+    tipo = resultado["tipo"]
+    urgencia = resultado["urgencia"]
 
-    urgencia = "Alta" if "urgente" in texto else "Normal"
-    
-    conn = db.get_db()
+    tecnico = {
+        "Red": "Carlos",
+        "Hardware": "Ana",
+        "Ventas": "Sebastian",
+        "General": "Soporte"
+    }.get(tipo, "Soporte")
+
+    estado = "abierta"
+
+    conn = get_db()
     cur = conn.cursor()
-    
-    # Cuando se isnerta enla bd el estado siempre es "abierta" 
-    estado="abierta"
 
     cur.execute("""
         INSERT INTO incidencias (texto, tipo, urgencia, tecnico, estado)
@@ -47,6 +40,7 @@ def clasificar():
 
     return jsonify({
         "id": incidencia_id,
+        "texto": texto,
         "tipo": tipo,
         "urgencia": urgencia,
         "tecnico": tecnico,
