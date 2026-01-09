@@ -17,9 +17,15 @@ const pool = new Pool({
 });
 
 app.get("/emails", async (req, res) => {
-  const result = await pool.query("SELECT * FROM emails ORDER BY created_at DESC");
-  res.json(result.rows);
+  try {
+    const result = await pool.query("SELECT * FROM incidencias ORDER BY id DESC");
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Error al conectar:", err);
+    res.status(500).json({ error: "Error al conectar con la base de datos" });
+  }
 });
+
 
 app.listen(3000, () => {
   console.log("API escuchando en puerto 3000");
