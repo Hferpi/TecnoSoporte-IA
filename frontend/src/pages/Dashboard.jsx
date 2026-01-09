@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 
 function Dashboard({ user, onLogout }) {
   const [incidencias, setIncidencias] = useState([])
-
+  const [error, setError] = useState(null) // corregido: estado para errores
 
   useEffect(() => {
     const queryParam = encodeURIComponent(user); 
@@ -69,6 +69,8 @@ function Dashboard({ user, onLogout }) {
       <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-xl">
         <h3 className="text-xl font-semibold mb-4">Incidencias</h3>
 
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+
         <ul className="flex flex-col gap-3">
           {incidencias.map((i) => (
             <li
@@ -83,7 +85,7 @@ function Dashboard({ user, onLogout }) {
                   {i.tipo} · Urgencia: {i.urgencia}
                 </p>
                 <p className="text-xs">
-                  Técnico: {i.tecnico} · {i.fecha}
+                  Técnico: {i.tecnico} · Remitente: {i.remitente || 'Desconocido'} · {i.fecha}
                 </p>
               </div>
 
