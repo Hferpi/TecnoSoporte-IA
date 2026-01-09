@@ -17,12 +17,43 @@ const pool = new Pool({
 });
 
 app.get("/emails", async (req, res) => {
+  const { user } = req.query; // recibe ?user=Carlos
   try {
-    const result = await pool.query("SELECT * FROM incidencias ORDER BY id DESC");
+    let query = "SELECT * FROM incidencias";
+    const params = [];
+
+    if (user && user !== "Soporte") {
+      query += " WHERE tecnico = $1"; // filtra solo por ese técnico
+      params.push(user);
+    }
+    query += " ORDER BY id DESC";
+
+    const result = await pool.query(query, params);
     res.json(result.rows);
   } catch (err) {
     console.error("Error al conectar:", err);
     res.status(500).json({ error: "Error al conectar con la base de datos" });
+  }
+});
+
+app.patch("/emails/:id", async (req, res) => {
+  const { id } = req.params;
+  const { estado } = req.body; // debe venir 'abierta' o 'cerrada'
+
+  try {
+    const result = await pool.query(
+      "UPDATE incidencias SET estado = $1 WHERE id = $2 RETURNING *",
+      [estado, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Incidencia no encontrada" });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("Error actualizando incidencia:", err);
+    res.status(500).json({ error: "Error al actualizar la incidencia" });
   }
 });
 

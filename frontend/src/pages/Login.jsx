@@ -27,7 +27,7 @@ function Login() {
           >
             <option value="">Usuario:</option>
             <option value="Carlos">Carlos</option>
-            <option value="Anna">Anna</option>
+            <option value="Ana">Ana</option>
             <option value="Sebastian">Sebastian</option>
             <option value="Soporte">Soporte (general)</option>
           </select>

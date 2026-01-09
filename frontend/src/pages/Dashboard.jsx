@@ -1,36 +1,52 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function Dashboard({ user, onLogout }) {
-  const [incidencias, setIncidencias] = useState([
-    {
-      id: 1,
-      texto: 'No funciona el correo',
-      tipo: 'Software',
-      urgencia: 'Alta',
-      tecnico: user,
-      fecha: '2026-01-08',
-      estado: 'abierta',
-    },
-    {
-      id: 2,
-      texto: 'Pantalla rota',
-      tipo: 'Hardware',
-      urgencia: 'Media',
-      tecnico: user,
-      fecha: '2026-01-07',
-      estado: 'abierta',
-    },
-  ])
+  const [incidencias, setIncidencias] = useState([])
 
-  const toggleEstado = (id) => {
-    setIncidencias(
-      incidencias.map((i) =>
-        i.id === id
-          ? { ...i, estado: i.estado === 'abierta' ? 'cerrada' : 'abierta' }
-          : i
-      )
-    )
-  }
+
+  useEffect(() => {
+    const queryParam = encodeURIComponent(user); 
+    fetch(`http://localhost:3000/emails?user=${queryParam}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Error HTTP: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => setIncidencias(data))
+      .catch((err) => {
+        console.error("Error al conectar:", err);
+        setError(err.message);
+      });
+  }, [user]);
+
+  const toggleEstado = async (id) => {
+    const incidencia = incidencias.find(i => i.id === id);
+    if (!incidencia) return;
+  
+    const nuevoEstado = incidencia.estado === 'abierta' ? 'cerrada' : 'abierta';
+  
+    try {
+      const res = await fetch(`http://localhost:3000/emails/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ estado: nuevoEstado })
+      });
+  
+      if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
+  
+      const updated = await res.json();
+  
+      setIncidencias(
+        incidencias.map(i => i.id === id ? updated : i)
+      );
+    } catch (err) {
+      console.error("Error al actualizar estado:", err);
+    }
+  };
+  
 
   return (
     <div className="min-h-dvh bg-gradient-to-br from-slate-900 to-blue-900 p-8 text-white">
