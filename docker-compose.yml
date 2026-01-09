@@ -18,7 +18,9 @@ services:
       POSTGRES_USER: n8n
       POSTGRES_PASSWORD: n8npass
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+    - postgres_data:/var/lib/postgresql/data
+    - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
     restart: always
 
   backend:

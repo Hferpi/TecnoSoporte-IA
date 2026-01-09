@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({
-  host: "postgres",   // nombre del servicio docker
+  host: "postgres",   
   user: "n8n",
   password: "n8npass",
   database: "mails",

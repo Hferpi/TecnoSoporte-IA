@@ -6,7 +6,7 @@ function Emails() {
 
   useEffect(() => {
     // Usar el nombre del servicio backend si el frontend corre dentro de Docker
-    fetch("http://backend:3000/emails")
+    fetch("http://localhost:3000/emails")
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Error HTTP: ${res.status}`);
