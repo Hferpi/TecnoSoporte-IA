@@ -23,8 +23,6 @@ app.get("/emails", async (req, res) => {
 
 app.listen(3000, () => {
   console.log("API escuchando en puerto 3000");
-<<<<<<< HEAD
+
 });
-=======
-});
->>>>>>> backend
+
