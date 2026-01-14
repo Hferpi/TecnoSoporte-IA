@@ -6,5 +6,5 @@ CREATE TABLE IF NOT EXISTS incidencias (
   tecnico VARCHAR(50),
   estado VARCHAR(50),
   fecha TIMESTAMP DEFAULT NOW(),
-  remitente VARCHAR(150)
+  remitente VARCHAR(200)
 );

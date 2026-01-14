@@ -4,6 +4,8 @@ import Dashboard from './Dashboard'
 function Login() {
   const [user, setUser] = useState(null)
   const [selectedUser, setSelectedUser] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
 
   if (!user) {
     return (
@@ -11,7 +13,18 @@ function Login() {
         <form
           onSubmit={(e) => {
             e.preventDefault()
-            if (!selectedUser) return
+
+            if (!selectedUser) {
+              setError('Selecciona un usuario')
+              return
+            }
+
+            if (password !== selectedUser) {
+              setError('Usuario o clave incorrectos')
+              return
+            }
+
+            setError('')
             setUser(selectedUser)
           }}
           className="bg-white/10 backdrop-blur-md p-8 rounded-2xl flex flex-col gap-4"
@@ -36,7 +49,13 @@ function Login() {
             type="password"
             className="p-3 rounded-lg"
             placeholder="Clave"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
+
+          {error && (
+            <p className="text-red-400 text-sm text-center">{error}</p>
+          )}
 
           <button className="bg-cyan-500 hover:bg-cyan-400 py-3 rounded-lg font-semibold">
             Entrar

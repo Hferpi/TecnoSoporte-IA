@@ -14,13 +14,12 @@ services:
   postgres:
     image: postgres:15
     environment:
-      POSTGRES_DB: mails
-      POSTGRES_USER: n8n
-      POSTGRES_PASSWORD: n8npass
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-    - postgres_data:/var/lib/postgresql/data
-    - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
-
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
 
   backend:
